@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import './answer.dart';
 import './question.dart';
+import './result.dart';
 
 void main() => runApp(MyApp());
 
@@ -34,33 +35,37 @@ class _MyAppState extends State<MyApp> {
     },
   ];
 
+  void _answerFunc() {
+    setState(() {
+      _questionIndex++;
+    });
+  }
+
+  void _restartQuiz() {
+    setState(() {
+      _questionIndex = 0;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    void _answerFunc() {
-      setState(() {
-        _questionIndex++;
-      });
-      print("_answer executed!");
-    }
-
     return MaterialApp(
       home: Scaffold(
-          appBar: AppBar(
-            title: Text("First Flutter App"),
-          ),
-          body: _questionIndex < questions.length
-              ? Column(
-                  children: [
-                    Question(questions[_questionIndex]['text'] as String),
-                    ...(questions[_questionIndex]['answers'] as List<String>)
-                        .map((answer) {
-                      return Answer(_answerFunc, answer);
-                    }).toList()
-                  ],
-                )
-              : Center(
-                  child: Text("Done!"),
-                )),
+        appBar: AppBar(
+          title: Text("First Flutter App"),
+        ),
+        body: _questionIndex < questions.length
+            ? Column(
+                children: [
+                  Question(questions[_questionIndex]['text'] as String),
+                  ...(questions[_questionIndex]['answers'] as List<String>)
+                      .map((answer) {
+                    return Answer(_answerFunc, answer);
+                  }).toList()
+                ],
+              )
+            : Result(_restartQuiz),
+      ),
     );
   }
 }
